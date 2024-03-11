@@ -4,11 +4,6 @@ import com.ems.EmployeeMS.entities.Employee;
 import com.ems.EmployeeMS.repositories.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 @Service
@@ -36,9 +31,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public void updateEmployee(Long employee_id, Employee employee) {
-        employeeRepository.updateEmployee(employee_id,employee);
+    public Employee updateEmployee(Long employee_id, Employee employee) {
+        employeeRepository.updateEmployee(employee_id, employee);
 
+        return employee;
     }
 
     @Override

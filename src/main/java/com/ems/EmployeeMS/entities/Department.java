@@ -9,6 +9,10 @@ public class Department {
         this.name = name;
     }
 
+    public Department() {
+
+    }
+
     public Long getDepartment_id() {
         return department_id;
     }

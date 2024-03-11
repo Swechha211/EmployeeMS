@@ -1,10 +1,10 @@
 package com.ems.EmployeeMS.repositories;
 
-import com.ems.EmployeeMS.entities.Employee;
+import com.ems.EmployeeMS.entities.Department;
+import com.ems.EmployeeMS.entities.Project;
 import com.ems.EmployeeMS.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,33 +13,31 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-@Repository
-public class EmployeeRepositoryImpl implements EmployeeRepository {
+public class ProjectRepositoryImpl implements ProjectRepository{
     private final DataSource dataSource;
 
-    public EmployeeRepositoryImpl(DataSource dataSource) {
+    public ProjectRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+    private final Logger logger = LoggerFactory.getLogger(DepartmentRepositoryImpl.class);
 
-    private final Logger logger = LoggerFactory.getLogger(EmployeeRepositoryImpl.class);
 
     @Override
-    public Employee saveEmployee(Employee employee) {
+    public Project saveProject(Project project) {
         try (Connection connection = dataSource.getConnection()) {
             System.out.println("Connected to the database");
             try (Statement statement = connection.createStatement()) {
-                String sql = "INSERT INTO employee(employee_id, name, email, address, phone) VALUES ('" + employee.getEmployee_id() + "', '" + employee.getName() + "', '" + employee.getEmail() + "', '" + employee.getAddress() + "', '" + employee.getPhone() + "')";
+                String sql = "INSERT INTO project (project_id, name, start_date, end_date) VALUES ('" + project
+                        .getProject_id()+ "', '" + project.getName() + "', '" + project.getStart_date() +"', '" + project.getEnd_date() + "')";
                 statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-                System.out.println("Employee saved successfully");
-//                System.out.println(sql);
+                System.out.println("Project saved successfully");
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        employee.setEmployee_id(generatedKeys.getLong(1));
-                        System.out.println("Employee id  ="+employee.getEmployee_id());
+                        project.setProject_id(generatedKeys.getLong(1));
+                        System.out.println("Project id  ="+project.getProject_id());
                     } else {
-                        throw new SQLException("Creating student failed, no ID obtained.");
+                        throw new SQLException("Creating project failed, no ID obtained.");
                     }
                 }
             } catch (SQLException e) {
@@ -49,26 +47,25 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         } catch (SQLException e) {
             System.out.println("Error connecting to the database" + e.getMessage());
         }
-        return employee;
+        return project;
     }
 
     @Override
-    public Employee getEmployeeByID(Long employee_id) {
+    public Project getProjectByID(Long project_id) {
         try (Connection connection = dataSource.getConnection()) {
             logger.info("Connected to the database");
 
             try (Statement statement = connection.createStatement()) {
-                String sql = "SELECT * FROM employee WHERE employee_id = " + employee_id;
+                String sql = "SELECT * FROM project WHERE project_id = " + project_id;
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     if (resultSet.next()) {
-                        Employee employee= new Employee();
-                        employee.setEmployee_id(resultSet.getLong("employee_id"));
-                        employee.setName(resultSet.getString("name"));
-                        employee.setEmail(resultSet.getString("email"));
-                        employee.setAddress(resultSet.getString("address"));
-                        employee.setPhone(resultSet.getString("phone"));
+                        Project project= new Project();
+                        project.setProject_id(resultSet.getLong("project_id"));
+                        project.setName(resultSet.getString("name"));
+                        project.setStart_date(resultSet.getDate("start_date"));
+                        project.setEnd_date(resultSet.getDate("end_date"));
 
-                        return employee;
+                        return project;
                     }
                 }
                 logger.info("Record selected successfully");
@@ -83,25 +80,24 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public List<Employee> getAllEmployee() {
-        List<Employee> employeesList = new ArrayList<>();
+    public List<Project> getAllProject() {
+        List<Project> projects = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
             logger.info("Connected to the database");
 
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "SELECT * FROM employee";
+                String sql = "SELECT * FROM project";
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     while (resultSet.next()) {
-                        Employee employee= new Employee();
-                        employee .setEmployee_id(resultSet.getLong("employee_id"));
-                        employee .setName(resultSet.getString("name"));
-                        employee .setEmail(resultSet.getString("email"));
-                        employee .setAddress(resultSet.getString("address"));
-                        employee .setPhone(resultSet.getString("phone"));
+                        Project project = new Project();
+                        project .setProject_id(resultSet.getLong("project_id"));
+                        project .setName(resultSet.getString("name"));
+                        project.setStart_date(resultSet.getDate("start_date"));
+                        project.setEnd_date(resultSet.getDate("end_date"));
 
-                        employeesList.add(employee);
+                        projects.add(project);
                     }
                 }
                 logger.info("Records selected successfully");
@@ -113,20 +109,19 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             logger.error("Error connecting to the database: " + e.getMessage());
         }
 
-        return employeesList;
+        return null;
     }
 
     @Override
-    public void updateEmployee(Long employee_id, Employee employee) {
-
+    public void updateProject(Long project_id, Project project) {
         try (Connection connection = dataSource.getConnection()) {
             logger.info("Connected to the database");
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "UPDATE employee SET name = '" + employee.getName()+ "', email = '" + employee.getEmail() + "', address = '" + employee.getAddress() + "', phone = '" + employee.getPhone() + "' WHERE employee_id = " + employee_id;
+                String sql = "UPDATE project SET name = '" + project.getName()+  "', start_date = '" + project.getStart_date() + "', end_date = '" + project.getEnd_date() + "' WHERE project_id = " + project_id;
                 int rowsAffected = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 if (rowsAffected == 0) {
-                    throw new ResourceNotFoundException("Employee", "employee_id", employee_id);
+                    throw new ResourceNotFoundException("Project", "project_id", project_id);
                 }
                 logger.info("Record updated successfully");
 
@@ -141,16 +136,16 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void deleteEmployee(Long employee_id) {
+    public void deleteProject(Long project_id) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-            String sql = "DELETE FROM employee WHERE employee_id = " + employee_id;
+            String sql = "DELETE FROM project WHERE project_id = " + project_id;
             int rowsAffected = statement.executeUpdate(sql);
             if (rowsAffected == 0) {
-                logger.warn("No user found with ID: " + employee_id);
+                logger.warn("No department found with ID: " + project_id);
 
             } else {
-                logger.info("User with ID " + employee_id + " deleted successfully");
+                logger.info("Project with ID " + project_id + " deleted successfully");
             }
         } catch (SQLException e) {
             logger.error("Error executing the SQL query: " + e.getMessage());

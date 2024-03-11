@@ -3,18 +3,69 @@ package com.ems.EmployeeMS.facade;
 import com.ems.EmployeeMS.entities.Employee;
 import com.ems.EmployeeMS.services.EmployeeService;
 import com.grpc.EmployeeOuterClass;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
 public class EmployeeFacade {
 
     private final EmployeeService employeeService;
-    private final ModelMapper modelMapper;
 
-    public EmployeeFacade(EmployeeService employeeService, ModelMapper modelMapper) {
+    public EmployeeFacade(EmployeeService employeeService) {
         this.employeeService = employeeService;
-        this.modelMapper = modelMapper;
+    }
+
+    public EmployeeOuterClass.Employee saveEmployee(EmployeeOuterClass.Employee employee){
+        System.out.println("Employee from input = "+employee);
+        Employee employee1 = mapToEntity(employee);
+        System.out.println("Employee after mapping to employee entity  = "+employee1);
+        EmployeeOuterClass.Employee employee2= mapToOuterClass(employeeService.saveEmployee(employee1));
+        System.out.println(" Employee after mapping to outerclass  = "+employee2);
+        return employee2;
+    }
+
+    public EmployeeOuterClass.Employee getEmployeetById(Long employee_id) {
+        System.out.println("Employee id= "+employee_id);
+        return mapToOuterClass(employeeService.getEmployeeByID(employee_id));
+    }
+
+    public List<EmployeeOuterClass.Employee> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployee();
+        return employees.stream()
+                .map(this::mapToOuterClass)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteEmployee(Long employeeId) {
+        System.out.println("Employee id to delete = " + employeeId);
+        employeeService.deleteEmployee(employeeId);
+    }
+
+    public EmployeeOuterClass.Employee updateEmployee(Long employee_id, EmployeeOuterClass.Employee employee) {
+        Employee updatedEmployee = employeeService.updateEmployee(employee_id, mapToEntity(employee));
+        return mapToOuterClass(updatedEmployee);
     }
 
 
+    private Employee mapToEntity(EmployeeOuterClass.Employee employee){
+        Employee employee1 = new Employee();
+        employee1.setEmployee_id(employee.getEmployeeId());
+        employee1.setName(employee.getName());
+        employee1.setEmail(employee.getEmail());
+        employee1.setAddress(employee.getAddress());
+        employee1.setPhone(employee.getPhone());
+        return employee1;
+    }
+
+    private EmployeeOuterClass.Employee mapToOuterClass(Employee employee){
+        EmployeeOuterClass.Employee.Builder employeeBuilder = EmployeeOuterClass.Employee.newBuilder();
+        employeeBuilder.setEmployeeId(employee.getEmployee_id())
+                .setName(employee.getName())
+                .setEmail(employee.getEmail())
+                .setAddress(employee.getAddress())
+                .setPhone(employee.getPhone());
+        return employeeBuilder.build();
+    }
 }
