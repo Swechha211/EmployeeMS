@@ -4,7 +4,7 @@ syntax="proto3";
 package ems;
 option java_package = "com.grpc";
 
-message Employee{
+message Employee {
   int64 employee_id = 1;
   string name = 2;
   string email = 3;

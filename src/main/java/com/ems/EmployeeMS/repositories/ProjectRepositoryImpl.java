@@ -1,10 +1,11 @@
 package com.ems.EmployeeMS.repositories;
 
-import com.ems.EmployeeMS.entities.Department;
+
 import com.ems.EmployeeMS.entities.Project;
 import com.ems.EmployeeMS.exceptions.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -14,13 +15,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class ProjectRepositoryImpl implements ProjectRepository{
     private final DataSource dataSource;
 
     public ProjectRepositoryImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    private final Logger logger = LoggerFactory.getLogger(DepartmentRepositoryImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(ProjectRepositoryImpl.class);
 
 
     @Override
@@ -62,8 +64,8 @@ public class ProjectRepositoryImpl implements ProjectRepository{
                         Project project= new Project();
                         project.setProject_id(resultSet.getLong("project_id"));
                         project.setName(resultSet.getString("name"));
-                        project.setStart_date(resultSet.getDate("start_date"));
-                        project.setEnd_date(resultSet.getDate("end_date"));
+                        project.setStart_date(resultSet.getString("start_date"));
+                        project.setEnd_date(resultSet.getString("end_date"));
 
                         return project;
                     }
@@ -94,8 +96,8 @@ public class ProjectRepositoryImpl implements ProjectRepository{
                         Project project = new Project();
                         project .setProject_id(resultSet.getLong("project_id"));
                         project .setName(resultSet.getString("name"));
-                        project.setStart_date(resultSet.getDate("start_date"));
-                        project.setEnd_date(resultSet.getDate("end_date"));
+                        project.setStart_date(resultSet.getString("start_date"));
+                        project.setEnd_date(resultSet.getString("end_date"));
 
                         projects.add(project);
                     }
@@ -109,7 +111,7 @@ public class ProjectRepositoryImpl implements ProjectRepository{
             logger.error("Error connecting to the database: " + e.getMessage());
         }
 
-        return null;
+        return projects;
     }
 
     @Override
@@ -142,10 +144,10 @@ public class ProjectRepositoryImpl implements ProjectRepository{
             String sql = "DELETE FROM project WHERE project_id = " + project_id;
             int rowsAffected = statement.executeUpdate(sql);
             if (rowsAffected == 0) {
-                logger.warn("No department found with ID: " + project_id);
+                logger.warn("No project found with ID: " + project_id);
 
             } else {
-                logger.info("Project with ID " + project_id + " deleted successfully");
+            logger.info("Project with ID " + project_id + " deleted successfully");
             }
         } catch (SQLException e) {
             logger.error("Error executing the SQL query: " + e.getMessage());

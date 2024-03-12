@@ -33,11 +33,13 @@ public class EmployeeServiceGrpcImpl extends EmployeeServiceGrpc.EmployeeService
         responseObserver.onCompleted();
     }
 
-//    @Override
+
+    //    @Override
 //    public void updateEmployee(EmployeeOuterClass.EmployeeRequest request, StreamObserver<EmployeeOuterClass.Employee> responseObserver) {
-//        EmployeeOuterClass.Employee response = employeeFacade.updateEmployee(request.getEmployeeId(),request) ;
-//        responseObserver.onNext(response);
-//        responseObserver.onCompleted();
+////        EmployeeOuterClass.Employee response = employeeFacade.updateEmployee(request.getEmployeeId(),request.getEmployeeDetail()) ;
+////        responseObserver.onNext(response);
+////        responseObserver.onCompleted();
+//
 //    }
 
     @Override
@@ -47,16 +49,39 @@ public class EmployeeServiceGrpcImpl extends EmployeeServiceGrpc.EmployeeService
         responseObserver.onCompleted();
     }
 
+//    @Override
+//    public void getAllEmployees(EmployeeOuterClass.EmptyRequest request, StreamObserver<EmployeeOuterClass.EmployeeResponse> responseObserver) {
+//        List<EmployeeOuterClass.Employee> responses = employeeFacade.getAllEmployees();
+//        for (EmployeeOuterClass.Employee response : responses) {
+//            EmployeeOuterClass.EmployeeResponse employeeResponse = EmployeeOuterClass.EmployeeResponse.newBuilder()
+//
+//                    .build();
+//            responseObserver.onNext(employeeResponse);
+//        }
+//        responseObserver.onCompleted();
+//
+//    }
+
     @Override
     public void getAllEmployees(EmployeeOuterClass.EmptyRequest request, StreamObserver<EmployeeOuterClass.EmployeeResponse> responseObserver) {
-        List<EmployeeOuterClass.Employee> responses = employeeFacade.getAllEmployees();
-        for (EmployeeOuterClass.Employee response : responses) {
+        try {
+            // Retrieve all employees from your backend system
+            List<EmployeeOuterClass.Employee> employees = employeeFacade.getAllEmployees();
+
+            // Build an EmployeeResponse containing the list of employees
             EmployeeOuterClass.EmployeeResponse employeeResponse = EmployeeOuterClass.EmployeeResponse.newBuilder()
-
+                    .addAllEmployees(employees)
                     .build();
-            responseObserver.onNext(employeeResponse);
-        }
-        responseObserver.onCompleted();
 
+            // Send the EmployeeResponse to the client
+            responseObserver.onNext(employeeResponse);
+
+            // Indicate the end of the streaming
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            // Handle any exceptions and send an error to the client
+            responseObserver.onError(e);
+        }
     }
+
 }

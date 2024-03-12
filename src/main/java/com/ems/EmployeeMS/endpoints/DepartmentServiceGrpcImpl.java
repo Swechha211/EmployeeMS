@@ -44,7 +44,7 @@ public class DepartmentServiceGrpcImpl  extends DepartmentServiceGrpc.Department
         if (responses != null) {
         for (DepartmentOuterClass.Department response : responses) {
             DepartmentOuterClass.DepartmentsResponse departmentResponse = DepartmentOuterClass.DepartmentsResponse.newBuilder()
-
+                    .addAllDepartments(responses)
                     .build();
             responseObserver.onNext(departmentResponse);
         }  } else {
@@ -56,6 +56,8 @@ public class DepartmentServiceGrpcImpl  extends DepartmentServiceGrpc.Department
 
     @Override
     public void updateDepartment(DepartmentOuterClass.Department request, StreamObserver<DepartmentOuterClass.Department> responseObserver) {
-        super.updateDepartment(request, responseObserver);
+        DepartmentOuterClass.Department response = departmentFacade.updateDepartment(request.getDepartmentId(),request) ;
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 }

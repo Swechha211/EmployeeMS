@@ -9,10 +9,27 @@ message Project{
   int64 project_id = 1;
   string name = 2;
   string start_date = 3;
-  int64 end_date = 4;
-  repeated Employee employee = 5;
-  repeated Department department = 6;
+  string end_date = 4;
+//  repeated Employee employee = 5;
+//  repeated Department department = 6;
 
 }
+message ProjectRequest{
+  int64 project_id = 1;
+}
+message ProjectResponse{
+  repeated Project projects = 1;
+}
 
+service ProjectService{
+  rpc AddProject(Project) returns (Project);
+  rpc GetProject(ProjectRequest) returns (Project);
+  rpc GetAllProjects(EmptyRequest3) returns (stream ProjectResponse);
+  rpc DeleteProject(ProjectRequest) returns (EmptyResponse3);
+  rpc UpdateProject(Project) returns (Project);
+//  rpc GetEmployees (EmployeeRequest) returns (stream EmployeeResponse);
+}
+
+message EmptyRequest3 {}
+message EmptyResponse3 {}
 

@@ -1,12 +1,12 @@
 package com.ems.EmployeeMS.services;
 
 import com.ems.EmployeeMS.entities.Project;
-import com.ems.EmployeeMS.repositories.DepartmentRepository;
 import com.ems.EmployeeMS.repositories.ProjectRepository;
-import com.ems.EmployeeMS.repositories.ProjectRepositoryImpl;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProjectServiceImpl implements ProjectService{
     private final ProjectRepository projectRepository;
 
@@ -30,10 +30,11 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public void updateProject(Long project_id, Project project) {
+    public Project updateProject(Long project_id, Project project) {
         projectRepository.updateProject(project_id, project);
 
 
+        return project;
     }
 
     @Override
