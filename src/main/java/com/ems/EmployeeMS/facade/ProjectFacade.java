@@ -18,14 +18,23 @@ public class ProjectFacade {
     }
 
 
-    public ProjectOuterClass.Project saveProject (ProjectOuterClass.Project project){
+    public ProjectOuterClass.Project saveProject (ProjectOuterClass.Project project, Long employee_id, Long department_id){
         System.out.println("Project from input = "+project);
         Project project1 = mapToEntity(project);
         System.out.println("Project after mapping to Project entity  = "+project1);
-        ProjectOuterClass.Project project2= mapToOuterClass(projectService.saveProject(project1));
+        ProjectOuterClass.Project project2= mapToOuterClass(projectService.saveProject(project1, employee_id,department_id));
         System.out.println(" Project after mapping to outerclass  = "+ project2);
         return project2;
     }
+
+//    public ProjectOuterClass.Project saveProject (ProjectOuterClass.Project project){
+//        System.out.println("Project from input = "+project);
+//        Project project1 = mapToEntity(project);
+//        System.out.println("Project after mapping to Project entity  = "+project1);
+//        ProjectOuterClass.Project project2= mapToOuterClass(projectService.saveProject(project1));
+//        System.out.println(" Project after mapping to outerclass  = "+ project2);
+//        return project2;
+//    }
     public ProjectOuterClass.Project getProjectById(Long project_id) {
         System.out.println("Project id= "+project_id);
         return mapToOuterClass(projectService.getProjectByID(project_id));
@@ -51,6 +60,19 @@ public class ProjectFacade {
     public ProjectOuterClass.Project updateProject(Long project_id,ProjectOuterClass.Project project) {
         Project updatedProject = projectService.updateProject(project_id, mapToEntity(project));
         return mapToOuterClass(updatedProject);
+    }
+
+    public List<ProjectOuterClass.Project> getProjectByEmployee(Long employee_id){
+        List<Project> projects = projectService.getProjectByEmployee(employee_id);
+        List<ProjectOuterClass.Project> projectOuterList = new ArrayList<>();
+        if (projects != null) {
+            for (Project project : projects) {
+                ProjectOuterClass.Project projectOuter = mapToOuterClass(project);
+                projectOuterList.add(projectOuter);
+            }
+        }
+        return projectOuterList;
+
     }
 
     private Project mapToEntity(ProjectOuterClass.Project project){

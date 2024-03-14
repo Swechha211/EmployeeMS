@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface ProjectService {
 
-    public Project saveProject (Project project);
+    public Project saveProject (Project project, Long employee_id, Long department_id);
+//    public Project saveProject (Project project);
     public Project  getProjectByID(Long project_id);
     public List<Project > getAllProject();
     public Project updateProject (Long project_id, Project  project);
     public void deleteProject (Long project_id);
+    List<Project> getProjectByEmployee(Long employee_id);
 }

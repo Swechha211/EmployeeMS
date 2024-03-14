@@ -1,5 +1,8 @@
 package com.ems.EmployeeMS.entities;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Department {
     private Long department_id;
     private String name;

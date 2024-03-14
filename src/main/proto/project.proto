@@ -1,7 +1,7 @@
 syntax="proto3";
-package ems;
-import "ems/department.proto";
-import "ems/employee.proto";
+package proto;
+import "department.proto";
+import "employee.proto";
 
 option java_package = "com.grpc";
 
@@ -10,8 +10,8 @@ message Project{
   string name = 2;
   string start_date = 3;
   string end_date = 4;
-//  repeated Employee employee = 5;
-//  repeated Department department = 6;
+  repeated Employee employee = 5;
+  repeated Department department = 6;
 
 }
 message ProjectRequest{
@@ -27,7 +27,7 @@ service ProjectService{
   rpc GetAllProjects(EmptyRequest3) returns (stream ProjectResponse);
   rpc DeleteProject(ProjectRequest) returns (EmptyResponse3);
   rpc UpdateProject(Project) returns (Project);
-//  rpc GetEmployees (EmployeeRequest) returns (stream EmployeeResponse);
+  rpc GetEmployees (EmployeeRequest) returns (stream EmployeeResponse);
 }
 
 message EmptyRequest3 {}

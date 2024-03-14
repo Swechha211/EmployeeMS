@@ -14,9 +14,14 @@ public class ProjectServiceImpl implements ProjectService{
         this.projectRepository = projectRepository;
     }
 
+//    @Override
+//    public Project saveProject(Project project) {
+//        return projectRepository.saveProject(project);
+//    }
+
     @Override
-    public Project saveProject(Project project) {
-        return projectRepository.saveProject(project);
+    public Project saveProject(Project project, Long employee_id, Long department_id) {
+        return projectRepository.saveProject(project, employee_id, department_id);
     }
 
     @Override
@@ -40,5 +45,10 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public void deleteProject(Long project_id) {
         projectRepository.deleteProject(project_id);
+    }
+
+    @Override
+    public List<Project> getProjectByEmployee(Long employee_id) {
+        return projectRepository.getProjectByEmployee(employee_id);
     }
 }
