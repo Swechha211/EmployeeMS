@@ -1,6 +1,10 @@
 package com.ems.EmployeeMS.entities;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Component
 public class Employee {
@@ -11,14 +15,17 @@ public class Employee {
 
     private String address;
     private String phone;
+    private Role role;
 
-    public Employee(long employee_id, String name, String email, String address, String phone) {
+    public Employee(long employee_id, String name, String email, String address, String phone, Role role) {
         this.employee_id = employee_id;
         this.name = name;
         this.email = email;
         this.address = address;
         this.phone = phone;
+        this.role = role;
     }
+
 
     public Employee() {
     }
@@ -61,6 +68,27 @@ public class Employee {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Collection<? extends GrantedAuthority> getRoles() {
+        return new ArrayList<>() {
+            {
+                add(new GrantedAuthority() {
+                    @Override
+                    public String getAuthority() {
+                        return role.name();
+                    }
+                });
+            }
+        };
     }
 
     @Override

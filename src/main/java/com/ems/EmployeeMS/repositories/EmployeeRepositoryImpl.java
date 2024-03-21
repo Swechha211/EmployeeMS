@@ -160,4 +160,34 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         }
 
     }
+
+    @Override
+    public Employee getEmployeeByname(String name) {
+        try (Connection connection = dataSource.getConnection()) {
+            logger.info("Connected to the database");
+
+            try (Statement statement = connection.createStatement()) {
+                String sql = "SELECT * FROM employee WHERE name = " + name;
+                try (ResultSet resultSet = statement.executeQuery(sql)) {
+                    if (resultSet.next()) {
+                        Employee employee= new Employee();
+                        employee.setEmployee_id(resultSet.getLong("employee_id"));
+                        employee.setName(resultSet.getString("name"));
+                        employee.setEmail(resultSet.getString("email"));
+                        employee.setAddress(resultSet.getString("address"));
+                        employee.setPhone(resultSet.getString("phone"));
+
+                        return employee;
+                    }
+                }
+                logger.info("Record selected successfully");
+            } catch (SQLException e) {
+                logger.error("Error executing the SQL query: " + e.getMessage());
+
+            }
+        } catch (Exception e) {
+            logger.error("Error connecting to the database: " + e.getMessage());
+        }
+        return null;
+    }
 }

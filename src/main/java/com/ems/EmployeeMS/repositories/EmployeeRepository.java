@@ -11,5 +11,7 @@ public interface EmployeeRepository {
     public void updateEmployee (Long employee_id, Employee employee);
     public void deleteEmployee(Long employee_id);
 
+    Employee getEmployeeByname(String name);
+
 
 }

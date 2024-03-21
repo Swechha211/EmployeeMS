@@ -1,8 +1,10 @@
 package com.ems.EmployeeMS.facade;
 
 import com.ems.EmployeeMS.entities.Employee;
+import com.ems.EmployeeMS.jwt.JwtTokenResponse;
 import com.ems.EmployeeMS.services.EmployeeService;
 import com.grpc.EmployeeOuterClass;
+import com.grpc.Schema;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,6 +49,10 @@ public class EmployeeFacade {
         Employee updatedEmployee = employeeService.updateEmployee(employee_id, mapToEntity(employee));
         return mapToOuterClass(updatedEmployee);
     }
+
+//    public Schema.JwToken login(Schema.JwtRequest jwtRequest){
+//        Schema.JwToken employee = employeeService.login();
+//    }
 
 
     private Employee mapToEntity(EmployeeOuterClass.Employee employee){

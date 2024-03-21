@@ -27,7 +27,7 @@ service ProjectService{
   rpc GetAllProjects(EmptyRequest3) returns (stream ProjectResponse);
   rpc DeleteProject(ProjectRequest) returns (EmptyResponse3);
   rpc UpdateProject(Project) returns (Project);
-  rpc GetEmployees (EmployeeRequest) returns (stream EmployeeResponse);
+  rpc GetEmployees (EmployeeRequest) returns (stream ProjectResponse);
 }
 
 message EmptyRequest3 {}

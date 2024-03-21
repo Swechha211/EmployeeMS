@@ -22,7 +22,7 @@ public class ProjectFacade {
         System.out.println("Project from input = "+project);
         Project project1 = mapToEntity(project);
         System.out.println("Project after mapping to Project entity  = "+project1);
-        ProjectOuterClass.Project project2= mapToOuterClass(projectService.saveProject(project1, employee_id,department_id));
+        ProjectOuterClass.Project project2= mapToOuterClass(projectService.saveProject(project1, employee_id, department_id));
         System.out.println(" Project after mapping to outerclass  = "+ project2);
         return project2;
     }
@@ -80,7 +80,7 @@ public class ProjectFacade {
         project1.setProject_id(project.getProjectId());
         project1.setName(project.getName());
         project1.setStart_date(project.getStartDate());
-        project1.setEnd_date(project.getStartDate());
+        project1.setEnd_date(project.getEndDate());
 
         return project1;
     }

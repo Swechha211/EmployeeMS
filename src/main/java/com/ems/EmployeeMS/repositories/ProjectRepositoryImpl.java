@@ -98,6 +98,14 @@ public class ProjectRepositoryImpl implements ProjectRepository{
                         project.setStart_date(resultSet.getString("start_date"));
                         project.setEnd_date(resultSet.getString("end_date"));
 
+                        Long eId = resultSet.getLong("emp_id");
+                        Employee employee1 = getEmployeeById(eId);
+                        project.setEmployee(employee1);
+
+                        Integer dId = resultSet.getInt("dep_id");
+                        Department department1 = getDepartmentById(dId);
+                        project.setDepartment(department1);
+
                         return project;
                     }
                 }
@@ -209,10 +217,12 @@ public class ProjectRepositoryImpl implements ProjectRepository{
                         Employee employee1 = getEmployeeById(eId); // Implement this method to fetch user by ID
                         project.setEmployee(employee1);
 
-//                        Long dId = resultSet.getLong("dep_id");
-//                        Department department1 = getDepartmentById(dId);
-//                        project.setDepartment(department1);
-//                        projects.add(project);
+                       Integer dId = resultSet.getInt("dep_id");
+                        Department department1 = getDepartmentById(dId);
+                        project.setDepartment(department1);
+
+
+                        projects.add(project);
                     }
                 }
                 logger.info("Record selected successfully");
@@ -223,12 +233,13 @@ public class ProjectRepositoryImpl implements ProjectRepository{
         } catch (Exception e) {
             logger.error("Error connecting to the database: " + e.getMessage());
         }
+
         return  projects;
     }
-    // Method to get User by ID using Statement
+    // Method to get Employee by ID using Statement
     private Employee getEmployeeById(Long employeeId) {
         Employee employee1 = null;
-        String sql = "SELECT * FROM user WHERE id = " + employeeId;
+        String sql = "SELECT * FROM employee WHERE employee_id = " + employeeId;
         try (   Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)) {
@@ -244,27 +255,27 @@ public class ProjectRepositoryImpl implements ProjectRepository{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return employee1;
     }
 
-    // Method to get Category by ID using Statement
-//    private Category getCategoryById(int categoryId) {
-//        Category category = null;
-//        String sql = "SELECT * FROM category WHERE catid = " + categoryId;
-//        try (   Connection connection = dataSource.getConnection();
-//                Statement statement = connection.createStatement();
-//                ResultSet resultSet = statement.executeQuery(sql)) {
-//            if (resultSet.next()) {
-//                category = new Category();
-//                category.setCatid(resultSet.getInt("catid"));
-//                category.setTitle(resultSet.getString("title"));
-//                category.setDescription(resultSet.getString("description"));
-//                // Populate other category properties as needed
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return category;
-//    }
+    // Method to get Department by ID using Statement
+    private Department getDepartmentById(int departmentId) {
+        Department department1 = null;
+        String sql = "SELECT * FROM department WHERE department_id = " + departmentId;
+        try (   Connection connection = dataSource.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql)) {
+            if (resultSet.next()) {
+                department1 = new Department();
+                department1.setDepartment_id(resultSet.getLong("department_id"));
+                department1.setName(resultSet.getString("name"));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return department1;
+    }
 
 }
