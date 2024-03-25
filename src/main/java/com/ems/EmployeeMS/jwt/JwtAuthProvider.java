@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class JwtAuthProvider implements AuthenticationProvider {
+public class JwtAuthProvider implements AuthenticationProvider , UserDetailsService{
 
     private final EmployeeRepository employeeRepository;
 
@@ -40,15 +40,19 @@ public class JwtAuthProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-
-
-        public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            Employee employee = employeeRepository.getEmployeeByname(username);
-            if(employee == null){
-                throw  new UsernameNotFoundException("Employee is not found");
-            }
-            return new CustomEmployeeDetails(employee.getName(), "", employee.getRoles());
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Employee employee = employeeRepository.getEmployeeByname(username);
+        if(employee == null){
+            throw  new UsernameNotFoundException("Employee is not found");
         }
+        return new CustomEmployeeDetails(employee.getName(), "", employee.getRoles());
+    }
+
+
+
+
+
 
 
 //    static  class DomainUserDetailService implements UserDetailsService{

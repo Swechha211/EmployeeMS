@@ -15,17 +15,18 @@ public class Employee {
 
     private String address;
     private String phone;
+    private String password;
     private Role role;
 
-    public Employee(long employee_id, String name, String email, String address, String phone, Role role) {
+    public Employee(long employee_id, String name, String email, String address, String phone, String password, Role role) {
         this.employee_id = employee_id;
         this.name = name;
         this.email = email;
         this.address = address;
         this.phone = phone;
+        this.password = password;
         this.role = role;
     }
-
 
     public Employee() {
     }
@@ -68,6 +69,14 @@ public class Employee {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Role getRole() {

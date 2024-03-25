@@ -1,6 +1,8 @@
 package com.ems.EmployeeMS.repositories;
 
 import com.ems.EmployeeMS.entities.Employee;
+import com.ems.EmployeeMS.entities.LoginModel;
+import com.grpc.Schema;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ public interface EmployeeRepository {
     public void deleteEmployee(Long employee_id);
 
     Employee getEmployeeByname(String name);
+
+
 
 
 }

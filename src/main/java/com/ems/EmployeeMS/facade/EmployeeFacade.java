@@ -1,6 +1,7 @@
 package com.ems.EmployeeMS.facade;
 
 import com.ems.EmployeeMS.entities.Employee;
+import com.ems.EmployeeMS.entities.LoginModel;
 import com.ems.EmployeeMS.jwt.JwtTokenResponse;
 import com.ems.EmployeeMS.services.EmployeeService;
 import com.grpc.EmployeeOuterClass;
@@ -51,8 +52,19 @@ public class EmployeeFacade {
     }
 
 //    public Schema.JwToken login(Schema.JwtRequest jwtRequest){
-//        Schema.JwToken employee = employeeService.login();
+//        Schema.JwToken employee = employeeService.login(jwtRequest);
+//        return employee;
 //    }
+
+    public Schema.LoginResponse login(Schema.LoginRequest loginRequest){
+        LoginModel loginModel = mapToLoginModel(loginRequest);
+        JwtTokenResponse loginModel1 = employeeService.login(loginModel);
+        return  Schema.LoginResponse.newBuilder()
+                .setJwtToken(employeeService.login(loginModel).getToken())
+                .build();
+    }
+
+
 
 
     private Employee mapToEntity(EmployeeOuterClass.Employee employee){
@@ -62,6 +74,7 @@ public class EmployeeFacade {
         employee1.setEmail(employee.getEmail());
         employee1.setAddress(employee.getAddress());
         employee1.setPhone(employee.getPhone());
+        employee1.setPassword(employee.getPassword());
         return employee1;
     }
 
@@ -71,7 +84,15 @@ public class EmployeeFacade {
                 .setName(employee.getName())
                 .setEmail(employee.getEmail())
                 .setAddress(employee.getAddress())
-                .setPhone(employee.getPhone());
+                .setPhone(employee.getPhone())
+                .setPassword(employee.getPassword());
+
         return employeeBuilder.build();
     }
+
+    private LoginModel mapToLoginModel(Schema.LoginRequest loginRequest) {
+        return new LoginModel(loginRequest.getUsername(), loginRequest.getPassword());
+    }
+
+
 }

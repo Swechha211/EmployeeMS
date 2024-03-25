@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +27,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         try (Connection connection = dataSource.getConnection()) {
             System.out.println("Connected to the database");
             try (Statement statement = connection.createStatement()) {
-                String sql = "INSERT INTO employee(employee_id, name, email, address, phone) VALUES ('" + employee.getEmployee_id() + "', '" + employee.getName() + "', '" + employee.getEmail() + "', '" + employee.getAddress() + "', '" + employee.getPhone() + "')";
+                String sql = "INSERT INTO employee(employee_id, name, email, address, phone, password) VALUES ('" + employee.getEmployee_id() + "', '" + employee.getName() + "', '" + employee.getEmail() + "', '" + employee.getAddress() + "', '" + employee.getPhone() +"', '" + employee.getPassword() + "')";
                 statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 System.out.println("Employee saved successfully");
 //                System.out.println(sql);
@@ -67,6 +64,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                         employee.setEmail(resultSet.getString("email"));
                         employee.setAddress(resultSet.getString("address"));
                         employee.setPhone(resultSet.getString("phone"));
+                        employee.setPassword(resultSet.getString("password"));
 
                         return employee;
                     }
@@ -100,6 +98,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                         employee .setEmail(resultSet.getString("email"));
                         employee .setAddress(resultSet.getString("address"));
                         employee .setPhone(resultSet.getString("phone"));
+                        employee .setPassword(resultSet.getString("password"));
+
 
                         employeesList.add(employee);
                     }
@@ -162,20 +162,24 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee getEmployeeByname(String name) {
+    public Employee getEmployeeByname(String ename) {
         try (Connection connection = dataSource.getConnection()) {
             logger.info("Connected to the database");
 
-            try (Statement statement = connection.createStatement()) {
-                String sql = "SELECT * FROM employee WHERE name = " + name;
-                try (ResultSet resultSet = statement.executeQuery(sql)) {
+            String sql = "SELECT * FROM employee WHERE name = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                // Set the parameter value for the name
+                statement.setString(1, ename);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        Employee employee= new Employee();
+                        Employee employee = new Employee();
                         employee.setEmployee_id(resultSet.getLong("employee_id"));
                         employee.setName(resultSet.getString("name"));
                         employee.setEmail(resultSet.getString("email"));
                         employee.setAddress(resultSet.getString("address"));
                         employee.setPhone(resultSet.getString("phone"));
+                        employee.setPassword(resultSet.getString("password"));
 
                         return employee;
                     }
@@ -183,11 +187,42 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
                 logger.info("Record selected successfully");
             } catch (SQLException e) {
                 logger.error("Error executing the SQL query: " + e.getMessage());
-
             }
         } catch (Exception e) {
             logger.error("Error connecting to the database: " + e.getMessage());
         }
         return null;
     }
+
+
+//    @Override
+//    public Employee getEmployeeByname(String ename) {
+//        try (Connection connection = dataSource.getConnection()) {
+//            logger.info("Connected to the database");
+//
+//            try (Statement statement = connection.createStatement()) {
+//                String sql = "SELECT * FROM employee WHERE name = " + ename;
+//                try (ResultSet resultSet = statement.executeQuery(sql)) {
+//                    if (resultSet.next()) {
+//                        Employee employee= new Employee();
+//                        employee.setEmployee_id(resultSet.getLong("employee_id"));
+//                        employee.setName(resultSet.getString("name"));
+//                        employee.setEmail(resultSet.getString("email"));
+//                        employee.setAddress(resultSet.getString("address"));
+//                        employee.setPhone(resultSet.getString("phone"));
+//                        employee.setPassword(resultSet.getString("password"));
+//
+//                        return employee;
+//                    }
+//                }
+//                logger.info("Record selected successfully");
+//            } catch (SQLException e) {
+//                logger.error("Error executing the SQL query: " + e.getMessage());
+//
+//            }
+//        } catch (Exception e) {
+//            logger.error("Error connecting to the database: " + e.getMessage());
+//        }
+//        return null;
+//    }
 }

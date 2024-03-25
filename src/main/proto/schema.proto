@@ -3,14 +3,24 @@ package proto;
 
 option java_package = "com.grpc";
 
-message JwtRequest{
+//message JwtRequest{
+//  string username = 1;
+//  string password =2;
+//}
+
+//message JwToken{
+//  string JwtToken = 1;
+//}
+
+message LoginRequest{
   string username = 1;
   string password =2;
 }
-
-message JwToken{
+message LoginResponse{
   string JwtToken = 1;
 }
+
+
 
 message EmployeeJwt{
   string name = 1;
@@ -21,13 +31,15 @@ message EmployeeJwt{
 message EmptyRequest4 {}
 
 
-service EmployeeJwtService{
-  rpc getEmlployeeJwtInfo(EmptyRequest4) returns (EmployeeJwt){}
-}
+//service EmployeeJwtService{
+//  rpc getEmlployeeJwtInfo(EmptyRequest4) returns (EmployeeJwt){}
+//}
 
 service  AuthService{
-  rpc authenticate(JwtRequest) returns (JwToken){}
-  rpc login(JwtRequest) returns (JwToken){}
+
+  rpc login(LoginRequest) returns (LoginResponse){}
+//  rpc authenticate(JwtRequest) returns (JwToken){}
+//  rpc login(JwtRequest) returns (JwToken){}
 
 }
 

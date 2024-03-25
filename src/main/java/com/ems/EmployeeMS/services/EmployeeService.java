@@ -1,6 +1,9 @@
 package com.ems.EmployeeMS.services;
 
 import com.ems.EmployeeMS.entities.Employee;
+import com.ems.EmployeeMS.entities.LoginModel;
+import com.ems.EmployeeMS.jwt.JwtTokenResponse;
+import com.grpc.Schema;
 
 import java.util.List;
 
@@ -10,6 +13,8 @@ public interface EmployeeService {
     public List<Employee> getAllEmployee();
     public Employee updateEmployee (Long employee_id, Employee employee);
     public void deleteEmployee(Long employee_id);
+
+    JwtTokenResponse login(LoginModel loginModel);
 
 
 }
