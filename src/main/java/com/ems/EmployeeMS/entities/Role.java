@@ -1,7 +1,7 @@
 package com.ems.EmployeeMS.entities;
 
 public enum Role {
-    MEMBER,
+    USER,
     ADMIN,
     SUPER_ADMIN
 }

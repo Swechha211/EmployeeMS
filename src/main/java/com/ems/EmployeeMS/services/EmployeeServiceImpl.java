@@ -4,6 +4,7 @@ import com.ems.EmployeeMS.entities.Employee;
 import com.ems.EmployeeMS.entities.LoginModel;
 import com.ems.EmployeeMS.jwt.JwtAuthProvider;
 import com.ems.EmployeeMS.jwt.JwtTokenResponse;
+import com.ems.EmployeeMS.jwt.JwtTokenUtil;
 import com.ems.EmployeeMS.repositories.EmployeeRepository;
 import com.grpc.Schema;
 import org.slf4j.Logger;
@@ -20,11 +21,13 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService{
     private final EmployeeRepository employeeRepository;
     private final JwtAuthProvider jwtAuthProvider;
+    private final JwtTokenUtil jwtTokenUtil;
     private final Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, JwtAuthProvider jwtAuthProvider) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, JwtAuthProvider jwtAuthProvider, JwtTokenUtil jwtTokenUtil) {
         this.employeeRepository = employeeRepository;
         this.jwtAuthProvider = jwtAuthProvider;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
 
@@ -65,9 +68,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         logger.info("User logged in successfully!!");
         Authentication authentication = jwtAuthProvider.authenticate(new UsernamePasswordAuthenticationToken(loginModel.getUsername(), loginModel.getPassword()));
-//        String token = jwtTokenUtil.generateToken(authentication);
-//        return new JwtTokenResponse(token);
-        return null;
+        String token = jwtTokenUtil.generateToken(authentication);
+        return new JwtTokenResponse(token);
+//        return null;
     }
 
 //    @Override

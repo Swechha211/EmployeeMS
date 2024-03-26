@@ -5,6 +5,7 @@ import com.ems.EmployeeMS.entities.Employee;
 import com.ems.EmployeeMS.services.DepartmentService;
 import com.grpc.DepartmentOuterClass;
 import com.grpc.EmployeeOuterClass;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class DepartmentFacade {
         return department2;
     }
 
+//    @PreAuthorize("hasRole('USER')")
     public DepartmentOuterClass.Department getDepartmentById(Long department_id) {
         System.out.println("Department id= "+department_id);
         return mapToOuterClass(departmentService.getDepartmentByID(department_id));
@@ -37,6 +39,8 @@ public class DepartmentFacade {
         System.out.println("Department id to delete = " + departmentId);
         departmentService.deleteDepartment(departmentId);
     }
+
+
 
     public List<DepartmentOuterClass.Department> getAllDepartments() {
 //        List<Department> departments = departmentService.getAllDepartment();

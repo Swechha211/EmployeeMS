@@ -16,7 +16,7 @@ public class Employee {
     private String address;
     private String phone;
     private String password;
-    private Role role;
+    private Role role = Role.ADMIN;
 
     public Employee(long employee_id, String name, String email, String address, String phone, String password, Role role) {
         this.employee_id = employee_id;

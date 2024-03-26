@@ -10,15 +10,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtil {
-//    SecretKey key = Jwts.SIG.HS512.key().build();
-@Value("${jwt.signing.key}")
-    String jwtSecretKey;
+    SecretKey key = Jwts.SIG.HS512.key().build();
+//@Value("${jwt.signing.key}")
+//    String jwtSecretKey;
 
 @Value("${jwt.expiration}")
     private long expiration;
@@ -27,22 +28,27 @@ public class JwtTokenUtil {
         String authorities=authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
 
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .subject((String) authentication.getPrincipal())
                 .claim("auth", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration * 1000))
-//                .signWith(key)
-                .signWith(SignatureAlgorithm.HS512,jwtSecretKey)
+                .signWith(key)
+//                .signWith(SignatureAlgorithm.HS512,jwtSecretKey)
                 .compact();
+        System.out.println("Generated Token: " + token);
+        return  token;
     }
+
 
     public Claims extractAllClaims(String token) throws SignatureException {
         token = token.trim();
+
         return Jwts.parser()
-//                .verifyWith(key)
+                .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
+
                 .getPayload();
     }
 

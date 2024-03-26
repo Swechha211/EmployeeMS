@@ -57,11 +57,26 @@ public class EmployeeFacade {
 //    }
 
     public Schema.LoginResponse login(Schema.LoginRequest loginRequest){
+//        LoginModel loginModel = mapToLoginModel(loginRequest);
+//        JwtTokenResponse loginModel1 = employeeService.login(loginModel);
+//        return  Schema.LoginResponse.newBuilder()
+//                .setJwtToken(employeeService.login(loginModel).getToken())
+//                .build();
+
         LoginModel loginModel = mapToLoginModel(loginRequest);
-        JwtTokenResponse loginModel1 = employeeService.login(loginModel);
-        return  Schema.LoginResponse.newBuilder()
-                .setJwtToken(employeeService.login(loginModel).getToken())
-                .build();
+        JwtTokenResponse jwtTokenResponse = employeeService.login(loginModel);
+
+        if (jwtTokenResponse != null) {
+            String jwtToken = jwtTokenResponse.getToken();
+            return Schema.LoginResponse.newBuilder()
+                    .setJwtToken(jwtToken)
+                    .build();
+        } else {
+            // Handle the case where login fails and returns null
+            // You can throw an exception, return a default response, or handle it based on your application's logic
+            // For example:
+            throw new RuntimeException("Login failed. Token not received.");
+        }
     }
 
 

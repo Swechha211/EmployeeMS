@@ -6,7 +6,9 @@ import com.ems.EmployeeMS.jwt.JwtAuthProvider;
 import com.ems.EmployeeMS.jwt.JwtTokenUtil;
 import com.grpc.AuthServiceGrpc;
 //import com.grpc.EmployeeJwtServiceGrpc;
+import com.grpc.DepartmentServiceGrpc;
 import com.grpc.EmployeeServiceGrpc;
+import com.grpc.ProjectServiceGrpc;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
@@ -99,8 +101,11 @@ public class SecurityConfig {
         manualGrpcSecurityMetadataSource.setDefault(AccessPredicate.permitAll());
 
         manualGrpcSecurityMetadataSource.set(AuthServiceGrpc.getServiceDescriptor(), AccessPredicate.permitAll());
-
-        manualGrpcSecurityMetadataSource.set(EmployeeServiceGrpc.getServiceDescriptor(), AccessPredicate.hasAnyRole(Role.SUPER_ADMIN.name(), Role.ADMIN.name()));
+        manualGrpcSecurityMetadataSource.set(EmployeeServiceGrpc.getServiceDescriptor(), AccessPredicate.permitAll());
+        manualGrpcSecurityMetadataSource.set(ProjectServiceGrpc.getServiceDescriptor(), AccessPredicate.hasRole(Role.ADMIN.name()));
+        manualGrpcSecurityMetadataSource.set(DepartmentServiceGrpc.getServiceDescriptor(), AccessPredicate.hasRole(Role.USER.name()));
+//        manualGrpcSecurityMetadataSource.set(AuthServiceGrpc.getServiceDescriptor(), AccessPredicate.hasRole(Role.ADMIN.name()));
+//        manualGrpcSecurityMetadataSource.set(EmployeeServiceGrpc.getServiceDescriptor(), AccessPredicate.hasAnyRole(Role.SUPER_ADMIN.name(), Role.ADMIN.name()));
 
 
 //        manualGrpcSecurityMetadataSource.set(EmployeeJwtServiceGrpc.getGetEmlployeeJwtInfoMethod(), AccessPredicate.hasRole("ROLE_ADMIN"));
