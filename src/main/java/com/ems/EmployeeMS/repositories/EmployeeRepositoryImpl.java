@@ -27,7 +27,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         try (Connection connection = dataSource.getConnection()) {
             System.out.println("Connected to the database");
             try (Statement statement = connection.createStatement()) {
-                String sql = "INSERT INTO employee(employee_id, name, email, address, phone, password) VALUES ('" + employee.getEmployee_id() + "', '" + employee.getName() + "', '" + employee.getEmail() + "', '" + employee.getAddress() + "', '" + employee.getPhone() +"', '" + employee.getPassword() + "')";
+                String sql = "INSERT INTO employees(employee_id, name, email, address, phone, password) VALUES ('" + employee.getEmployee_id() + "', '" + employee.getName() + "', '" + employee.getEmail() + "', '" + employee.getAddress() + "', '" + employee.getPhone() +"', '" + employee.getPassword() + "')";
                 statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 System.out.println("Employee saved successfully");
 //                System.out.println(sql);
@@ -55,7 +55,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             logger.info("Connected to the database");
 
             try (Statement statement = connection.createStatement()) {
-                String sql = "SELECT * FROM employee WHERE employee_id = " + employee_id;
+                String sql = "SELECT * FROM employees WHERE employee_id = " + employee_id;
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     if (resultSet.next()) {
                         Employee employee= new Employee();
@@ -89,7 +89,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "SELECT * FROM employee";
+                String sql = "SELECT * FROM employees";
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     while (resultSet.next()) {
                         Employee employee= new Employee();
@@ -123,7 +123,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
             logger.info("Connected to the database");
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "UPDATE employee SET name = '" + employee.getName()+ "', email = '" + employee.getEmail() + "', address = '" + employee.getAddress() + "', phone = '" + employee.getPhone() + "' WHERE employee_id = " + employee_id;
+                String sql = "UPDATE employees SET name = '" + employee.getName()+ "', email = '" + employee.getEmail() + "', address = '" + employee.getAddress() + "', phone = '" + employee.getPhone() + "' WHERE employee_id = " + employee_id;
                 int rowsAffected = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 if (rowsAffected == 0) {
                     throw new ResourceNotFoundException("Employee", "employee_id", employee_id);
@@ -144,7 +144,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     public void deleteEmployee(Long employee_id) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-            String sql = "DELETE FROM employee WHERE employee_id = " + employee_id;
+            String sql = "DELETE FROM employees WHERE employee_id = " + employee_id;
             int rowsAffected = statement.executeUpdate(sql);
             if (rowsAffected == 0) {
                 logger.warn("No user found with ID: " + employee_id);
@@ -166,7 +166,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         try (Connection connection = dataSource.getConnection()) {
             logger.info("Connected to the database");
 
-            String sql = "SELECT * FROM employee WHERE name = ?";
+            String sql = "SELECT * FROM employees WHERE name = ?";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 // Set the parameter value for the name
                 statement.setString(1, ename);
@@ -201,7 +201,7 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
 //            logger.info("Connected to the database");
 //
 //            try (Statement statement = connection.createStatement()) {
-//                String sql = "SELECT * FROM employee WHERE name = " + ename;
+//                String sql = "SELECT * FROM employees WHERE name = " + ename;
 //                try (ResultSet resultSet = statement.executeQuery(sql)) {
 //                    if (resultSet.next()) {
 //                        Employee employee= new Employee();

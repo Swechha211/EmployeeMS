@@ -51,10 +51,7 @@ public class EmployeeFacade {
         return mapToOuterClass(updatedEmployee);
     }
 
-//    public Schema.JwToken login(Schema.JwtRequest jwtRequest){
-//        Schema.JwToken employee = employeeService.login(jwtRequest);
-//        return employee;
-//    }
+
 
     public Schema.LoginResponse login(Schema.LoginRequest loginRequest){
 //        LoginModel loginModel = mapToLoginModel(loginRequest);
@@ -72,9 +69,7 @@ public class EmployeeFacade {
                     .setJwtToken(jwtToken)
                     .build();
         } else {
-            // Handle the case where login fails and returns null
-            // You can throw an exception, return a default response, or handle it based on your application's logic
-            // For example:
+
             throw new RuntimeException("Login failed. Token not received.");
         }
     }

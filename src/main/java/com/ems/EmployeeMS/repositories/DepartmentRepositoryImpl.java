@@ -29,7 +29,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository{
         try (Connection connection = dataSource.getConnection()) {
             System.out.println("Connected to the database");
             try (Statement statement = connection.createStatement()) {
-                String sql = "INSERT INTO department(department_id, name) VALUES ('" + department.getDepartment_id()+ "', '" + department.getName() +  "')";
+                String sql = "INSERT INTO departments(department_id, name) VALUES ('" + department.getDepartment_id()+ "', '" + department.getName() +  "')";
                 statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 System.out.println("Department saved successfully");
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -56,7 +56,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository{
             logger.info("Connected to the database");
 
             try (Statement statement = connection.createStatement()) {
-                String sql = "SELECT * FROM department WHERE department_id = " + department_id;
+                String sql = "SELECT * FROM departments WHERE department_id = " + department_id;
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     if (resultSet.next()) {
                         Department department = new Department();
@@ -86,7 +86,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository{
 
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "SELECT * FROM department";
+                String sql = "SELECT * FROM departments";
                 try (ResultSet resultSet = statement.executeQuery(sql)) {
                     while (resultSet.next()) {
                         Department department = new Department();
@@ -114,7 +114,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository{
             logger.info("Connected to the database");
             try (Statement statement = connection.createStatement()) {
 
-                String sql = "UPDATE department SET name = '" + department.getName()+  "' WHERE department_id = " + department_id;
+                String sql = "UPDATE departments SET name = '" + department.getName()+  "' WHERE department_id = " + department_id;
                 int rowsAffected = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
                 if (rowsAffected == 0) {
                     throw new ResourceNotFoundException("Department", "department_id", department_id);
@@ -135,7 +135,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository{
     public void deleteDepartment(Long department_id) {
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
-            String sql = "DELETE FROM department WHERE department_id = " + department_id;
+            String sql = "DELETE FROM departments WHERE department_id = " + department_id;
             int rowsAffected = statement.executeUpdate(sql);
             if (rowsAffected == 0) {
                 logger.warn("No department found with ID: " + department_id);

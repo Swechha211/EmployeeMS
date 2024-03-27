@@ -18,7 +18,7 @@ service EmployeeService {
   rpc GetEmployee (EmployeeRequest) returns (Employee);
   rpc GetAllEmployees (EmptyRequest) returns (stream EmployeeResponse);
   rpc DeleteEmployee (EmployeeRequest) returns (EmptyResponse);
-  rpc UpdateEmployee (EmployeeRequest) returns (Employee);
+  rpc UpdateEmployee (Employee) returns (Employee);
 }
 
 

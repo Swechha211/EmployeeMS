@@ -33,6 +33,12 @@ public class EmployeeServiceGrpcImpl extends EmployeeServiceGrpc.EmployeeService
         responseObserver.onCompleted();
     }
 
+    @Override
+    public void updateEmployee(EmployeeOuterClass.Employee request, StreamObserver<EmployeeOuterClass.Employee> responseObserver) {
+        EmployeeOuterClass.Employee response = employeeFacade.updateEmployee(request.getEmployeeId(),request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
 
     //    @Override
 //    public void updateEmployee(EmployeeOuterClass.EmployeeRequest request, StreamObserver<EmployeeOuterClass.Employee> responseObserver) {
